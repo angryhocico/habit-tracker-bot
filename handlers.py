@@ -1,12 +1,19 @@
 from aiogram import Router, types
 from aiogram.filters import Command
+from database import add_user
 
 router = Router()
 
 @router.message(Command("start"))
 async def cmd_start(message: types.Message):
-    await message.answer(
-        "Привет! Я Habit Tracker Bot. 📅\n"
-        "Я помогу тебе внедрять полезные привычки.\n"
-        "Пока я умею только здороваться, но скоро научусь большему!"
-    )
+    user = message.from_user
+    # пробуем добавить в БД
+    is_new = add_user(user.id, user.username)
+    
+    text = "Привет! Я Habit Tracker Bot. 📅"
+    if is_new:
+        text += "\nЯ тебя запомнил! Добро пожаловать."
+    else:
+        text += "\nРад видеть тебя снова!"
+
+    await message.answer(text)

@@ -5,9 +5,13 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
 from handlers import router
+from database import init_db
 
 async def main():
     load_dotenv()
+    init_db()
+    print("База данных инициализирована.")
+    
     token = os.getenv("BOT_TOKEN")
     
     logging.basicConfig(level=logging.INFO)
